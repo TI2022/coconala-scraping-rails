@@ -20,10 +20,23 @@ test:
   <<: *default
   database: db/test.sqlite3
 
+# heroku設定
+# production:
+#   <<: *default
+#   adapter: postgresql
+#   encoding: unicode
+#   database: 
+#   username: 
+#   password: 
+
+# AWS RDS設定
 production:
   <<: *default
-  adapter: postgresql
-  encoding: unicode
-  database: account-database-instance
-  username: account_app
-  password: Scms15silvia
+  database: <%= ENV['DB_DATABASE'] %>
+  adapter: mysql2
+  encoding: utf8mb4
+  charset: utf8mb4
+  collation: utf8mb4_general_ci
+  host: <%= ENV['DB_HOST'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>

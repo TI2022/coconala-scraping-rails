@@ -21,6 +21,11 @@ gem 'jquery-rails'
 gem 'turbolinks',   '~> 5'
 gem 'jbuilder',     '~> 2.5'
 gem 'carrierwave'
+gem 'ransack'
+gem 'devise'
+gem 'google-cloud-vision'
+gem 'prawn'
+gem 'prawn-table'
 
 group :development, :test do
   gem 'sqlite3'
