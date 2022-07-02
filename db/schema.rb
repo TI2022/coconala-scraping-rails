@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20220304060223) do
+ActiveRecord::Schema.define(version: 20220505085222) do
 
   create_table "accounts", force: :cascade do |t|
     t.date "accounting_date"
@@ -61,6 +61,13 @@ ActiveRecord::Schema.define(version: 20220304060223) do
     t.time "landing_time"
     t.string "landing_fishing_ground_name"
     t.index ["ground_id"], name: "index_landings_on_ground_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.integer "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

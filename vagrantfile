@@ -1,0 +1,39 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.network :"forwarded_port", guest: 3000, host: 3000
+  config.vm.synced_folder "~/workspace", "/home/ubuntu/workspace", :create => true, mount_options: ['dmode=777','fmode=755']
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+
+    sudo apt-get -y upgrade
+    sudo apt-get -y update
+
+    # install essentials
+    sudo apt-get install git curl g++ make vim nodejs libreadline-dev libssl-dev zlib1g-dev imagemagick libmagickcore-dev libmagickwand-dev -y
+    sudo apt-get remove ruby -y
+
+    # get rbenv and set path
+    git clone git://github.com/rbenv/rbenv.git /home/ubuntu/.rbenv
+    echo 'export PATH="/home/ubuntu/.rbenv/bin:$PATH"' >> ~/.profile
+    echo 'eval "$(rbenv init -)"' >> ~/.profile
+    . /home/ubuntu/.profile
+
+    # install ruby-build
+    mkdir -p ~/.rbenv/plugins
+    git clone git://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+
+    # install ruby
+    rbenv install 2.3.0
+    rbenv global 2.3.0
+    rbenv rehash
+    sudo apt-get install ruby-railties -y
+
+    # install bundle
+    gem install bundler --no-document
+
+    # install postgresql
+    sudo apt-get install postgresql postgresql-contrib python-psycopg2 libpq-dev -y
+  SHELL
+end
