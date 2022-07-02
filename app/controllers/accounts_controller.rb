@@ -1,29 +1,30 @@
 class AccountsController < ApplicationController
   require 'csv'
+
   before_action :set_account, only: [:transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
   
   before_action :set_accounts, only: [:journal_books, :balance_sheet, :profit_and_loss_statement]
   
   before_action :logged_in_user, only: [:all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
                                         :journal_books, :balance_sheet, :profit_and_loss_statement,
-                                        :ocr_new, :ocr_create,
+                                        :ocr_new, :ocr_create, :ocr_upload,
                                         :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
 
   before_action :admin_and_accounting_user, only: [:all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
                                                   :journal_books, :balance_sheet, :profit_and_loss_statement,
-                                                  :ocr_new, :ocr_create,
+                                                  :ocr_new, :ocr_create, :ocr_upload,
                                                   :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
 
   before_action :set_one_month, only: [:all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
                                       :journal_books, :balance_sheet, :profit_and_loss_statement,
-                                      :ocr_new, :ocr_create,
+                                      :ocr_new, :ocr_create, :ocr_upload,
                                       :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
 
-  before_action :ocr_right_account_titles, only: [:ocr_new, :ocr_create]
-  before_action :ocr_account_titles, only: [:ocr_new, :ocr_create]
-  before_action :transfer_slip_account_titles, only: [:ocr_new, :ocr_create, :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit]
-  before_action :tax_rate_arys, only: [:ocr_new, :ocr_create, :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
-  before_action :sub_account_titles, only: [:ocr_new, :ocr_create, :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
+  before_action :ocr_right_account_titles, only: [:ocr_new, :ocr_create, :ocr_upload]
+  before_action :ocr_account_titles, only: [:ocr_new, :ocr_create, :ocr_upload]
+  before_action :transfer_slip_account_titles, only: [:ocr_new, :ocr_create, :ocr_upload, :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit]
+  before_action :tax_rate_arys, only: [:ocr_new, :ocr_create, :ocr_upload, :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
+  before_action :sub_account_titles, only: [:ocr_new, :ocr_create, :ocr_upload, :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
   
   before_action :left_account_titles, only: :all_general_ledger
   before_action :right_account_titles, only: :all_general_ledger
@@ -62,11 +63,32 @@ class AccountsController < ApplicationController
     @account = Account.new(transfer_slip_account_params)
     if @account.save
       flash[:success] = "#{l(@account.accounting_date, format: :long)}の帳簿を新規作成しました。"
-      redirect_to ocr_new_accounts_url
+      redirect_to transfer_slip_new_accounts_url
     else
       flash[:danger] = "入力エラー。"
-      redirect_to ocr_new_accounts_url
+      render :ocr_new
     end
+  end
+
+  def ocr_upload
+    unless params[:account][:image].nil?
+      @res_text = Vision.get_image_data(params[:account][:image].path)
+      @res_desc = @res_text[0]
+      @tags = {}
+      # @tags['date'] = @res_desc.slice('[12]\d{3}[/\-年](0?[1-9]|1[0-2])[/\-月](0?[1-9]|[12][0-9]|3[01])日?')
+      # @tags['time'] = @res_desc.slice('((0?|1)[0-9]|2[0-3])[:時][0-5][0-9]分?')
+      # @tags['tel'] = @res_desc.slice('0\d{1,3}-\d{1,4}-\d{4}')
+      # @tags['total_price'] = @res_desc.slice('合計¥(0|[1-9]\d*|[1-9]\d{0,2}(,\d{3})+)$')
+      @tax_rate_hash = @tax_rate_arys.to_h
+      @tags["date"] = @res_desc.slice(/[0-9].*/)
+      @tags['time'] = @res_desc.slice(/[0-9].*/)
+      @tags['tel'] = @res_desc.slice(/0.*/)
+      @tags['total_price'] = @res_desc.slice(/¥.*/)
+      @tags = @tags.to_a
+    end
+    @account = Account.new
+    @compound_journals = @account.compound_journals.build
+    render :ocr_new
   end
   
   # --------------------------振替伝票作成-------------------------
@@ -156,7 +178,8 @@ class AccountsController < ApplicationController
     def transfer_slip_account_params
       params.require(:account).permit(:accounting_date,
                                       :image,
-                                      compound_journals_attributes: [
+                                      compound_journals_attributes:
+                                      [
                                       :id,
                                       :account_title,
                                       :amount,
@@ -168,7 +191,8 @@ class AccountsController < ApplicationController
                                       :right_tax_rate,
                                       :right_sub_account_title,
                                       :_destroy
-                                      ])
+                                      ]
+                                    )
     end
     # --------------------------------------------------------------
 

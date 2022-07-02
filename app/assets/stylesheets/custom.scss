@@ -11,6 +11,12 @@
   justify-content: center;
   max-width: 400px;
 }
+#draggablePanelList .panel-heading {
+  cursor: move;
+}
+#draggablePanelList2 .panel-heading {
+  cursor: move;
+}
 
 // universal
   .alert {

@@ -16,19 +16,19 @@ Rails.application.routes.draw do
   resources :users
   
   # 漁場
-  resources :grounds do
+  # resources :grounds do
   
-    member do
-      get 'landing_show', to: 'landings#show'
-      delete 'landing_destroy', to: 'landings#destroy'
-    end
+    # member do
+    #   get 'landing_show', to: 'landings#show'
+    #   delete 'landing_destroy', to: 'landings#destroy'
+    # end
     # 水揚げ
-    resources :landings, only: [:new, :create, :edit, :update]
+    # resources :landings, only: [:new, :create, :edit, :update]
   
-  end
+  # end
   
-  get 'landing_index', to: 'landings#index'
-  get 'landing_pre_new', to: 'landings#pre_new'
+  # get 'landing_index', to: 'landings#index'
+  # get 'landing_pre_new', to: 'landings#pre_new'
   
   # 帳簿（売上帳）
   resources :accounts do
@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       # レシートOCR
       get 'ocr_new'
       post 'ocr_create'
+      post 'ocr_upload'
       
       # 仕訳帳
       get 'journal_books'
