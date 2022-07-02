@@ -7,24 +7,24 @@ class ApplicationController < ActionController::Base
   include LandingsHelper
   include AccountsHelper
 
-  require 'net/http'
-  require 'uri'
+  # require 'net/http'
+  # require 'uri'
 
   $days_of_the_week = %w{日 月 火 水 木 金 土}
 
-  uri = URI.parse("https://xxx.herokuapp.com/predict/iris_logreg")
-  request = Net::HTTP::Post.new(uri)
-  request.basic_auth("john", "hello")
-  request.content_type = "application/json"
-  request.body = "{'petal_length': 4.5, 'petal_width': 1.5, 'sepal_length': 6.0, 'sepal_width': 2.8999999999999999}"
+  # uri = URI.parse("https://xxx.herokuapp.com/predict/iris_logreg")
+  # request = Net::HTTP::Post.new(uri)
+  # request.basic_auth("john", "hello")
+  # request.content_type = "application/json"
+  # request.body = "{'petal_length': 4.5, 'petal_width': 1.5, 'sepal_length': 6.0, 'sepal_width': 2.8999999999999999}"
 
-  req_options = {
-    use_ssl: uri.scheme == "https",
-  }
+  # req_options = {
+  #   use_ssl: uri.scheme == "https",
+  # }
 
-  response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
-    http.request(request)
-  end
+  # response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+  #   http.request(request)
+  # end
   
   # beforフィルター
   # paramsハッシュからユーザーを取得します。
