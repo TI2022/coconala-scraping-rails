@@ -46,8 +46,7 @@ class LandingsController < ApplicationController
   end
   
   def index
-    @search_params = landing_search_params
-    @landings = Landing.search(@search_params).includes(:ground)
+    @landings = Landing.includes(:ground)
     @grounds = Ground.all
   end
   
@@ -74,9 +73,6 @@ class LandingsController < ApplicationController
     end
     
     
-    def landing_search_params
-      params.fetch(:search, {}).permit(:landing_date, :landing_fishing_ground_name, :fish_species)
-    end
 
     def set_landing
       @landing = Landing.find(params[:id])
