@@ -1,0 +1,26 @@
+<%= provide(:title, '検索・出力') %>
+
+<h2>スクレイピング</h2>
+
+<div>
+  <!--補助科目-->
+  <table class="table table-bordered table-condensed table-hover" id="table-account">
+    <thead>
+      <tr>
+        <th>レスポンスheader</th>
+        <th>レスポンスbody</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+      <td>
+          <div><%= @res_head %></div>
+        </td>
+        <td>
+          <div><%= @res_body %></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+</div>
