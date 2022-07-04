@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   
   # トップページ
-  root 'static_pages#top'
+  root 'sessions#new'
   
   # ユーザー登録ページ
   get '/signup', to: 'users#new'

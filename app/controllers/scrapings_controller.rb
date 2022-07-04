@@ -11,6 +11,7 @@ class ScrapingsController < ApplicationController
     @response = Net::HTTP.get_response(URI.parse(uri))
     @res_head = @response.header
     @res_body = @response.body
+    p @response
     p @res_body
     p @res_head
   end
