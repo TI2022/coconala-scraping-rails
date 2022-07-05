@@ -12,7 +12,6 @@ test:
   <<: *default
   database: db/test.sqlite3
 
-heroku設定
 production:
   <<: *default
   adapter: postgresql
