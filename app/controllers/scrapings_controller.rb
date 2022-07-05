@@ -7,7 +7,7 @@ class ScrapingsController < ApplicationController
   end
 
   def index
-    uri = "https://coconala-scraping-app.herokuapp.com/scraping"
+    uri = "https://coconala-scraping-app.herokuapp.com/crowdworks_scraping"
     @response = Net::HTTP.get_response(URI.parse(uri))
     @res_head = @response.header
     @res_body = @response.body
