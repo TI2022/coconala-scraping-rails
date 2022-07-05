@@ -25,13 +25,11 @@
       <div class="mt-4">
         <%= f.submit "ログイン", class: "btn btn-primary btn-block btn-login" %>
       </div>
-    <% end %>
-    <p>
-      ユーザー登録がまだの場合は<%= link_to "こちら", signup_path %>
-    </p>
-    <div class="separator"></div>
-    <% unless logged_in? %>
-      <%= form_with(scope: :session, url: login_path, method: :post, local: true) do |f| %>
+      <p>
+        ユーザー登録がまだの場合は<%= link_to "こちら", signup_path %>
+      </p>
+      <div class="separator"></div>
+      <% unless logged_in? %>
         <div class="mt-4">
           <%= f.hidden_field :email, :value => "guest@email.com" %>
           <%= f.hidden_field :password, :value => "guest" %>
