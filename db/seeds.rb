@@ -13,8 +13,8 @@ User.create!(
 User.create!(
       name: "guestユーザー",
       email: "guest@email.com",
-      password: "guest",
-      password_confirmation: "guest",
+      password: "guestuser",
+      password_confirmation: "guestuser",
       guest: true)
 User.create!(
       name: "一般ユーザー",
