@@ -31,7 +31,7 @@
     </p>
     <div class="separator"></div>
     <% unless logged_in? %>
-      <%= form_with(scope: :session, url: login_path, local: true) do |f| %>
+      <%= form_with(scope: :session, url: login_path, method: :post, local: true) do |f| %>
         <div class="mt-4">
           <%= f.hidden_field :email, :value => "guest@email.com" %>
           <%= f.hidden_field :password, :value => "guest" %>
