@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   
   resources :scrapings do
     collection do
+      get 'amazon'
       get 'csv'
     end
   end
