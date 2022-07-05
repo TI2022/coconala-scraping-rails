@@ -9,12 +9,13 @@ User.create!(
       email: "sub_admin@email.com",
       password: "subadmin01*+",
       password_confirmation: "subadmin01*+",
-      accounting: true)
+      sub_admin: true)
 User.create!(
       name: "guestユーザー",
       email: "guest@email.com",
       password: "guest",
-      password_confirmation: "guest")
+      password_confirmation: "guest",
+      guest: true)
 User.create!(
       name: "一般ユーザー",
       email: "general1@email.com",
